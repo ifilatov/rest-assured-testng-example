@@ -10,4 +10,4 @@ REST Assured + TestNG automation framework for REST API.
 
 ### Build and run Sanity tests
 
-* mvn -Psanity clean test -DpropertyName=YourPropertyValue
+* mvn -Psanity clean test -Duname=TestUser -Dpwd=Qwer12

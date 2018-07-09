@@ -1,20 +1,23 @@
 package common;
 
 import io.restassured.RestAssured;
+import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
 import org.testng.ITestContext;
 
 public class TestBase {
 
     public String runId = String.valueOf(System.currentTimeMillis()).substring(5, 12);
-    public String token;
-    public String customProperty;
+    public String uname;
+    public String pwd;
+
 
     @BeforeClass
     public void beforeClass(ITestContext context) {
         RestAssured.baseURI = context.getCurrentXmlTest().getParameter("BaseURI");
-        customProperty = context.getCurrentXmlTest().getParameter("YourProperty");
-        token = "123";//get token
+        uname = context.getCurrentXmlTest().getParameter("UserName");
+        pwd = context.getCurrentXmlTest().getParameter("UserPass");
+        Reporter.log("Username="+uname+" Password="+pwd, true);
     }
 
 }

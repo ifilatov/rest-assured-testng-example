@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Sanity Suite">
-    <parameter name="BaseURI" value="http://base-uri.com"/>
-    <parameter name="YourProperty" value="${propertyName}" />
+    <parameter name="BaseURI" value="https://reqres.in/"/>
+    <parameter name="UserName" value="${uname}" />
+    <parameter name="UserPass" value="${pwd}" />
     <test name="Sanity test">
         <classes>
-            <class name="suites.users.Users">
+            <class name="suites.users.CRUD">
                 <methods>
                     <include name="createUser"/>
                     <include name="readUser"/>

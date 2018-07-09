@@ -11,18 +11,19 @@ import org.testng.annotations.Test;
 import org.testng.Reporter;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 import common.TestBase;
 
-public class Users extends TestBase {
+public class CRUD extends TestBase {
 
     private User currentTestUser;
 
     @BeforeClass
     public void setUp() {
-        RestAssured.basePath = "v1/customers/foundrytest/users";
+        RestAssured.basePath = "api/users";
         Reporter.log("Set Up", true);
-        currentTestUser = new User(this.runId);
+        currentTestUser = new User("Janet","Weaver");
     }
 
     @Test
@@ -34,32 +35,34 @@ public class Users extends TestBase {
         given().
                 accept(ContentType.JSON).
                 contentType(ContentType.JSON).
-                header("Authorization", "Bearer "+this.token).
                 body(currentTestUser).
-                log().
-                body().
+//                log request body
+//                log().body().
         when().
                 post().
         then().
-                log().all().
+//                log full response (headers + body)
+//                log().all().
+                statusCode(201).
                 spec(userSpec).
         extract().
-                path("data.userId").toString();
-        Reporter.log(currentTestUser.getUsername());
+                path("id").toString();
         currentTestUser.setUserId(userId);
+        Reporter.log("user id = "+currentTestUser.getUserId(), true);
     }
 
     @Test
     public void readUser() {
         Reporter.log("Read User",true);
-        ResponseSpecification userSpec = currentTestUser.getUserSpec();
 
         given().
-                header("Authorization", "Bearer "+this.token).
         when().
-                get("/"+currentTestUser.getUserId()).
+                get("/2").
         then().
-                spec(userSpec);
+                statusCode(200).
+                body("data.first_name", equalTo("Janet")).
+                body("data.last_name", equalTo("Weaver"));
+
     }
 
     @Test
@@ -71,26 +74,24 @@ public class Users extends TestBase {
         given().
                 accept(ContentType.JSON).
                 contentType(ContentType.JSON).
-                header("Authorization", "Bearer "+this.token).
                 body(currentTestUser).
         when().
-                put("/"+currentTestUser.getUserId()).
+                put("/2").
         then().
+                statusCode(200).
                 spec(userSpec);
     }
 
     @Test
     public void deleteUser() {
         Reporter.log("Delete User", true);
-        currentTestUser.setActive(false);
         ResponseSpecification userSpec = currentTestUser.getUserSpec();
 
         given().
-                header("Authorization", "Bearer "+this.token).
         when().
                 delete("/"+currentTestUser.getUserId()).
         then().
-                spec(userSpec);
+                statusCode(204);
     }
 
 }
